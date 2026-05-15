@@ -4,6 +4,8 @@ import TeacherModel from "@/src/models/user/teacher.model";
 import { signToken } from "@/src/lib/auth/jwt";
 import { setAuthCookie } from "@/src/lib/auth/cookies";
 
+
+// teacher login
 export async function POST(req: Request) {
     const { email, password } = await req.json();
 

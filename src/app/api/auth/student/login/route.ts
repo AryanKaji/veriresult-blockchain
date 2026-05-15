@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { StudentModel } from "@/src/models/user/student.model";
+import StudentModel from "@/src/models/user/student.model";
 import { signToken } from "@/src/lib/auth/jwt";
 import { setAuthCookie } from "@/src/lib/auth/cookies";
+import { connectDB } from "@/src/lib/db";
 
+
+// student login
 export async function POST(req: Request) {
+    await connectDB();
+
     const { enrollmentNumber, password } = await req.json();
 
     const student = await StudentModel.findOne({ enrollmentNumber });

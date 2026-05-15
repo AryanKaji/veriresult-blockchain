@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { signToken } from "@/src/lib/auth/jwt";
 import { setAuthCookie } from "@/src/lib/auth/cookies";
 
+
+// admin login
 export async function POST(req: Request) {
     const { email, password } = await req.json();
 
