@@ -4,6 +4,7 @@ import SemesterModel from "@/src/models/academic/semester.model";
 import {
   AdminCourse,
   AdminSemester,
+  CourseOption,
   CourseInput,
   SemesterInput,
 } from "@/src/types/academic/adminAcademic.types";
@@ -119,11 +120,32 @@ function serializeSemester(semester: {
   };
 }
 
+function serializeCourseOption(course: {
+  _id: unknown;
+  courseCode: string;
+  courseName: string;
+  durationInYears: number;
+}): CourseOption {
+  return {
+    id: String(course._id),
+    courseCode: course.courseCode,
+    courseName: course.courseName,
+    durationInYears: course.durationInYears,
+  };
+}
+
 export async function listCourses() {
   await connectDB();
 
   const courses = await CourseModel.find().sort({ courseCode: 1 });
   return courses.map(serializeCourse);
+}
+
+export async function listAvailableCourseOptions() {
+  await connectDB();
+
+  const courses = await CourseModel.find({ isAvailable: true }).sort({ courseCode: 1 });
+  return courses.map(serializeCourseOption);
 }
 
 export async function createCourse(input: Partial<CourseInput>) {

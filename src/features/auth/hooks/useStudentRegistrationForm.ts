@@ -1,10 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { CourseOption } from "@/src/types/academic/adminAcademic.types";
 import {
   StudentRegistrationFormValues,
   StudentRegistrationStatus,
 } from "@/src/types/auth/studentRegistration.types";
+import { getCourseOptions } from "../../academic/services/courseCatalogClient";
 import { submitStudentRegistration } from "../services/studentRegistrationClient";
 
 const EMPTY_FORM: StudentRegistrationFormValues = {
@@ -22,8 +24,43 @@ export function useStudentRegistrationForm() {
   const [status, setStatus] = useState<StudentRegistrationStatus>("idle");
   const [message, setMessage] = useState("");
   const [enrollmentNumber, setEnrollmentNumber] = useState("");
+  const [courses, setCourses] = useState<CourseOption[]>([]);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(true);
 
   const isSubmitting = status === "submitting";
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadCourses() {
+      try {
+        const courseOptions = await getCourseOptions();
+
+        if (!isActive) {
+          return;
+        }
+
+        setCourses(courseOptions);
+      } catch (error) {
+        if (!isActive) {
+          return;
+        }
+
+        setStatus("error");
+        setMessage(error instanceof Error ? error.message : "Unable to load courses.");
+      } finally {
+        if (isActive) {
+          setIsLoadingCourses(false);
+        }
+      }
+    }
+
+    void loadCourses();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   function updateField(name: keyof StudentRegistrationFormValues, value: string) {
     setForm((current) => ({
@@ -39,6 +76,12 @@ export function useStudentRegistrationForm() {
     setEnrollmentNumber("");
 
     try {
+      if (!form.courseCode) {
+        setStatus("error");
+        setMessage("Please select a course.");
+        return;
+      }
+
       if (form.password !== form.confirmPassword) {
         setStatus("error");
         setMessage("Password and confirm password must match.");
@@ -64,8 +107,10 @@ export function useStudentRegistrationForm() {
   }
 
   return {
+    courses,
     enrollmentNumber,
     form,
+    isLoadingCourses,
     isSubmitting,
     message,
     status,

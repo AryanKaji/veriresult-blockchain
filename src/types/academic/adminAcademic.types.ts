@@ -38,3 +38,10 @@ export type AcademicPayload = {
   courses: AdminCourse[];
   semesters: AdminSemester[];
 };
+
+export type CourseOption = {
+  id: string;
+  courseCode: string;
+  courseName: string;
+  durationInYears: number;
+};

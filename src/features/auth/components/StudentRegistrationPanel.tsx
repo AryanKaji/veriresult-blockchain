@@ -6,7 +6,9 @@ import { StudentRegistrationForm } from "./StudentRegistrationForm";
 
 export function StudentRegistrationPanel() {
   const {
+    courses,
     form,
+    isLoadingCourses,
     isSubmitting,
     message,
     status,
@@ -29,7 +31,9 @@ export function StudentRegistrationPanel() {
 
         <div className="grid gap-6">
           <StudentRegistrationForm
+            courses={courses}
             form={form}
+            isLoadingCourses={isLoadingCourses}
             isSubmitting={isSubmitting}
             message={message}
             onSubmit={submitRegistration}

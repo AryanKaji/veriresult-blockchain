@@ -2,15 +2,19 @@
 
 import { FormEvent } from "react";
 import { Button } from "@/src/components/ui/Button";
+import { SearchableCourseSelect } from "@/src/components/ui/SearchableCourseSelect";
 import { StatusMessage } from "@/src/components/ui/StatusMessage";
 import { TextField } from "@/src/components/ui/TextField";
+import { CourseOption } from "@/src/types/academic/adminAcademic.types";
 import {
   StudentRegistrationFormValues,
   StudentRegistrationStatus,
 } from "@/src/types/auth/studentRegistration.types";
 
 type StudentRegistrationFormProps = {
+  courses: CourseOption[];
   form: StudentRegistrationFormValues;
+  isLoadingCourses: boolean;
   isSubmitting: boolean;
   message: string;
   status: StudentRegistrationStatus;
@@ -19,7 +23,9 @@ type StudentRegistrationFormProps = {
 };
 
 export function StudentRegistrationForm({
+  courses,
   form,
+  isLoadingCourses,
   isSubmitting,
   message,
   status,
@@ -90,13 +96,14 @@ export function StudentRegistrationForm({
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField
-          label="Course code"
+        <SearchableCourseSelect
+          courses={courses}
+          disabled={courses.length === 0}
+          label="Course"
+          loading={isLoadingCourses}
           name="courseCode"
-          onChange={(event) => onUpdateField("courseCode", event.target.value)}
-          placeholder="BCA"
-          required
-          type="text"
+          onChange={(courseCode) => onUpdateField("courseCode", courseCode)}
+          placeholder="Search course code or name"
           value={form.courseCode}
         />
 
