@@ -60,6 +60,12 @@ const StudentSchema = new Schema<StudentDocument>({
     },
 }, { timestamps: true });
 
+StudentSchema.index({ enrollmentNumber: 1 });
+StudentSchema.index({ courseCode: 1 });
+StudentSchema.index({ rollNumber: 1 });
+StudentSchema.index({ courseCode: 1, rollNumber: 1 });
+StudentSchema.index({ isActive: 1 });
+
 const StudentModel = mongoose.models.Student ||
     mongoose.model("Student", StudentSchema);
 

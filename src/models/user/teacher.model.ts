@@ -41,6 +41,10 @@ const TeacherSchema = new Schema<ITeacherDocument>({
     ],
 }, { timestamps: true });
 
+TeacherSchema.index({ email: 1 });
+TeacherSchema.index({ assignedSubjectIds: 1 });
+TeacherSchema.index({ isActive: 1 });
+
 const TeacherModel = mongoose.models.Teacher ||
     mongoose.model("Teacher", TeacherSchema);
 

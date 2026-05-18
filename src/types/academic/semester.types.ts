@@ -10,4 +10,3 @@ export interface ISemester {
 }
 
 export interface SemesterDocument extends ISemester, Document { }
-    

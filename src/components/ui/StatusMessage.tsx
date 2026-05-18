@@ -1,8 +1,8 @@
-import { LoginStatus } from "@/src/types/auth/login.types";
+type MessageStatus = "idle" | "submitting" | "success" | "error";
 
 type StatusMessageProps = {
   message: string;
-  status: LoginStatus;
+  status: MessageStatus;
 };
 
 export function StatusMessage({ message, status }: StatusMessageProps) {
